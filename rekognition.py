@@ -40,7 +40,7 @@ class Rekognition:
 
     # use detect_moderation_labels if wanting to moderate photos of explicit content
     # moderation labels return labels that are classified as suggestive or explicit, moderator can decide what to do
-    # contains minConfidence as a parameter to return, no maxLabels
+    # contains minConfidence as a parameter to return
     def detect_moderation_labels(self, min_confidence):
         self.response = self.client.detect_moderation_labels(
             Image={'Bytes': self.source_bytes},  # if img from proj src, use this line
@@ -51,5 +51,28 @@ class Rekognition:
             # }},
             MinConfidence=min_confidence)  # returns only labels with confidence >
 
+    # Detects faces in image and the attributes of the face
+    # Attributes parameter exists to specify which attributes wanted for return
+    # If nothing passed in, will use DEFAULT as attribute
+    def detect_faces(self, att):
+        self.response = self.client.detect_faces(
+            Image={'Bytes': self.source_bytes},  # if img from proj src, use this line
+            # Image={'S3Object': {  # if img from S3 Bucket, use these lines
+            #     'Bucket': '',  # name of the S3 bucket
+            #     'Name': '',  # name of the img file in the bucket
+            #     'Version': ''  # only needed of bucket has versioning enabled
+            # }},
+            Attributes=[att])  # Array of facial attributes wanted to be returned; ALL -> all facial attributes
+
     def print_labels(self):
-        print(self.response)
+        use_default = None
+        for key, value in self.response.items():
+            if key == 'FaceDetails':
+                for people_att in value:
+                    print(people_att)
+                    print("======")
+            else:
+                use_default = True
+                break
+        if use_default:
+            print(self.response)
