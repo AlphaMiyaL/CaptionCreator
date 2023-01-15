@@ -64,6 +64,17 @@ class Rekognition:
             # }},
             Attributes=[att])  # Array of facial attributes wanted to be returned; ALL -> all facial attributes
 
+
+    def recognize_celebrities(self):
+        self.response = self.client.recognize_celebrities(
+            Image={'Bytes': self.source_bytes},  # if img from proj src, use this line
+            # Image={'S3Object': {  # if img from S3 Bucket, use these lines
+            #     'Bucket': '',  # name of the S3 bucket
+            #     'Name': '',  # name of the img file in the bucket
+            #     'Version': ''  # only needed of bucket has versioning enabled
+            # }},
+            )
+
     def print_labels(self):
         use_default = None
         for key, value in self.response.items():
@@ -71,6 +82,9 @@ class Rekognition:
                 for people_att in value:
                     print(people_att)
                     print("======")
+            if key == 'CelebrityFaces':
+                for people in value:
+                    print(people)
             else:
                 use_default = True
                 break
