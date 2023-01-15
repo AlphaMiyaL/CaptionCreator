@@ -97,11 +97,12 @@ class Rekognition:
                     'Bucket': '',  # name of the S3 bucket
                     'Name': self.photo,  # name of the img file in the bucket
                     # 'Version': ''  # only needed of bucket has versioning enabled
-                }},)
+                }}, )
         else:
             self.response = self.client.recognize_celebrities(
                 Image={'Bytes': self.source_bytes})  # if img from proj src, use this line
 
+    # compares faces in source and target images and returns whether faces match or not with confidence value
     def compare_faces(self):
         if self.use_s3:
             self.response = self.client.compare_faces(
@@ -123,6 +124,19 @@ class Rekognition:
                 SourceImage={'Bytes': self.source_bytes},  # if img from proj src, use this line
                 TargetImage={'Bytes': self.source_bytes2}
             )
+
+    # detects text in images and returns said text
+    def detect_text(self):
+        if self.use_s3:
+            self.response = self.client.detect_text(
+                Image={'S3Object': {  # if img from S3 Bucket, use these lines
+                    'Bucket': '',  # name of the S3 bucket
+                    'Name': self.photo,  # name of the img file in the bucket
+                    # 'Version': ''  # only needed of bucket has versioning enabled
+                }}, )
+        else:
+            self.response = self.client.detect_text(
+                Image={'Bytes': self.source_bytes})  # if img from proj src, use this line
 
     def print_labels(self):
         use_default = None
