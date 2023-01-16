@@ -1,8 +1,9 @@
 # CaptionCreator
 Generates captions for images, using Amazon Rekognition to identify the objects and actions depicted in the image
 
-## Imports
+## Imports (pip install in terminal of project or so)
 boto3 <br /> 
+openai <br />
 python 3.10.8
 
 ## AWS requirements
