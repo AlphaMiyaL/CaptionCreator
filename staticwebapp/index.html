@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caption Creator</title>
+    <script type="text/javascript" src="./script.js"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <noscript>
+        <style type="text/css">
+            .App {
+                visibility: hidden!important;
+                height: 0!important;
+                width: 0!important;
+                margin: 0!important;
+                padding: 0!important;
+                overflow: hidden!important;
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <noscript>JavaScript is required to use this app.</noscript>
+    <div class="App">
+        <div class="Header">
+            <img class="Logo" src="./logo.svg" />
+            <div class="Title">Caption Creator</div>
+        </div>
+        <div class="Body">
+            <div class="Form">
+                <input id="fileField" type="file" accept="image/png,image/jpeg"></input>
+                <input id="generateButton" type="button" value="Generate"></input>
+            </div>
+            <div id="message"></div>
+            <img id="image" />
+        </div>
+    </div>
+</body>
+</html>
