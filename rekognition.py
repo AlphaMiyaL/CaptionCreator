@@ -1,6 +1,7 @@
 import csv
 import boto3
 
+
 class Rekognition:
     def __init__(self, csv_file):
         # csv file is the credentials for the IAM account
@@ -28,6 +29,9 @@ class Rekognition:
         with open(photo, 'rb') as source_image:
             self.source_bytes = source_image.read()  # Convert image to bytes
 
+    def replace_photo2(self, bytes):
+        self.source_bytes = bytes
+
     # replaces photo used to compare in compare_faces
     def replace_comparing_photo(self, photo):
         self.photo2 = photo
@@ -52,7 +56,6 @@ class Rekognition:
                 Image={'Bytes': self.source_bytes},  # if img from proj src, use this line
                 MaxLabels=max_labels,  # limits the labels returned
                 MinConfidence=min_confidence)  # returns only labels with confidence >
-        
 
     # use detect_moderation_labels if wanting to moderate photos of explicit content
     # moderation labels return labels that are classified as suggestive or explicit, moderator can decide what to do
