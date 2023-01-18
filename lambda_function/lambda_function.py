@@ -4,8 +4,6 @@ from base64 import b64decode
 import boto3
 import openai
 
-from rekognition import Rekognition
-
 print('initializing function')
 
 MAX_FILESIZE = 5 * 1024 * 1024
@@ -110,7 +108,7 @@ def process_base64_image(output):
 def generate_labels(output, max_labels, min_confidence):
     client = None
     try:
-        client = Rekognition('new_user_credentials.csv')
+        client = Rekognition(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
     except:
         service_unavailable_error(output)
         return
@@ -118,7 +116,7 @@ def generate_labels(output, max_labels, min_confidence):
     # get best matching label names
     labels = None
     try:
-        client.replace_photo2(output.body)
+        client.replace_photo(output.body)
         client.detect_labels(max_labels, min_confidence)
     except:
         service_unavailable_error(output)
@@ -174,3 +172,29 @@ def lambda_handler(event, context):
 
 
 print('initialized')
+
+
+class Rekognition:
+    def __init__(self, access_key_id, secret_access_key):
+        # csv file is the credentials for the IAM account
+        # the IAM account should have FULL access to Amazon Rekognition and S3 Bucket to work properly
+        self.client = boto3.client('rekognition',
+                                   region_name='us-west-2',
+                                   aws_access_key_id=access_key_id,
+                                   aws_secret_access_key=secret_access_key)
+        self.use_s3 = False
+        self.photo = None
+        self.source_bytes = None
+        self.photo2 = None
+        self.source_bytes2 = None
+        self.response = None
+
+    # Images should only be .jpg or .png format
+    def replace_photo(self, photo_bytes):
+        self.source_bytes = photo_bytes
+
+    def detect_labels(self, max_labels, min_confidence):
+        self.response = self.client.detect_labels(
+            Image={'Bytes': self.source_bytes},  # if img from proj src, use this line
+            MaxLabels=max_labels,  # limits the labels returned
+            MinConfidence=min_confidence)  # returns only labels with confidence >
