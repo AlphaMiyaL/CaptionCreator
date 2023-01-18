@@ -122,7 +122,7 @@ def generate_labels(output, max_labels, min_confidence):
         service_unavailable_error(output)
         return
 
-    output.body = ', '.join(label['name'] for label in labels['Labels'])
+    output.body = ', '.join(label['name'] for label in client.response['Labels'])
 
 
 def generate_caption(output):
