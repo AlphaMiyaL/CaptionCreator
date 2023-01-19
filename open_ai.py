@@ -4,7 +4,7 @@ import openai
 class OpenAi:
     def __init__(self):
         # Initialize the openai API key
-        openai.api_key = "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"
+        openai.api_key = "OPENAI_API_KEY"
 
     def caption(self, labels):
         # Build the prompt for GPT-3
